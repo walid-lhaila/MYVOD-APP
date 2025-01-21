@@ -3,8 +3,14 @@ import {Ionicons} from "@expo/vector-icons";
 import netIcon from '../../assets/images/netIcon.png';
 import {LinearGradient} from "expo-linear-gradient";
 import FilterBar from "@/app/components/FilterBar";
-import bg from '../../assets/images/bg.jpeg';
+import movie from '../../assets/images/dropsOfGod.png';
+import movie1 from '../../assets/images/bookClub.png';
+import movie2 from '../../assets/images/ghosted.png';
+import movie3 from '../../assets/images/paint.png';
+import movie4 from '../../assets/images/nightagent.png';
 import FiveLastMovies from "@/app/components/FiveLastMovies";
+import SectionTitle from "@/app/components/SectionTitle";
+import MoviesCard from "@/app/components/MoviesCard";
 
 export default function Index() {
     return (
@@ -13,10 +19,39 @@ export default function Index() {
                 <Image style={styles.logo} source={netIcon} />
                 <Ionicons name={"search-outline"} color={"white"} size={35} />
             </View>
-            <FilterBar />
+
             <ScrollView>
-                <FiveLastMovies />
+                <FilterBar />
+                <View style={{paddingTop: 20,}} >
+                   <FiveLastMovies />
+                   <SectionTitle title='Last Movies' />
+                    <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5}}>
+                        <MoviesCard src={movie3}/>
+                        <MoviesCard src={movie2}/>
+                        <MoviesCard src={movie1}/>
+                        <MoviesCard src={movie}/>
+                        <MoviesCard src={movie4}/>
+                    </ScrollView>
+                    <SectionTitle title='All Movies' />
+                    <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
+                        <MoviesCard src={movie3}/>
+                        <MoviesCard src={movie2}/>
+                        <MoviesCard src={movie1}/>
+                        <MoviesCard src={movie}/>
+                        <MoviesCard src={movie4}/>
+                    </ScrollView>
+                    <SectionTitle title='My List' />
+                    <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
+                        <MoviesCard src={movie3}/>
+                        <MoviesCard src={movie2}/>
+                        <MoviesCard src={movie1}/>
+                        <MoviesCard src={movie}/>
+                        <MoviesCard src={movie4}/>
+                    </ScrollView>
+                </View>
+
             </ScrollView>
+
         </LinearGradient>
     );
 }
