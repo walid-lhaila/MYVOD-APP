@@ -1,9 +1,11 @@
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useRouter} from "expo-router";
+import React from "react";
 
 
 export default function Login (){
     const router = useRouter();
+
         return (
             <View style={{ flex: 1, backgroundColor: 'black' }}>
                 <View style={{ width: '90%', marginHorizontal: 'auto', gap: 20, paddingTop: 100}}>

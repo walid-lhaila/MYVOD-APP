@@ -30,7 +30,7 @@
           "image": "./assets/images/netIcon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#0000FF",
+          "backgroundColor": "#000000",
           "dark": {
             "image": "./assets/splash-icon-dark.png",
             "backgroundColor": "#000000"
