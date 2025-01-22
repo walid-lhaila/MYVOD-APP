@@ -31,18 +31,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#888B90',
         color: 'white',
     },
-    button: {
-        backgroundColor: "red",
-        paddingVertical: 15,
-        paddingHorizontal: 5,
-        borderRadius: 5,
-    },
-    buttonText: {
-        color: 'white',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontFamily: 'serif',
-    },
+        button: {
+            backgroundColor: "red",
+            paddingVertical: 15,
+            paddingHorizontal: 5,
+            borderRadius: 5,
+        },
+        buttonText: {
+            color: 'white',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontFamily: 'serif',
+        },
     text: {
         color: 'white',
         fontFamily: 'mono',

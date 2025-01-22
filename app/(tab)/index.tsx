@@ -8,18 +8,20 @@ import movie1 from '../../assets/images/bookClub.png';
 import movie2 from '../../assets/images/ghosted.png';
 import movie3 from '../../assets/images/paint.png';
 import movie4 from '../../assets/images/nightagent.png';
+import sisu from '../../assets/images/sisu.mp4';
 import FiveLastMovies from "@/app/components/FiveLastMovies";
 import SectionTitle from "@/app/components/SectionTitle";
 import MoviesCard from "@/app/components/MoviesCard";
 import {useState} from "react";
 import MovieDetails from "@/app/components/MovieDetails";
 
+
 export default function Index() {
-    const [detailsComponent, setDetailsComponent] = useState(true);
+    const [detailsComponent, setDetailsComponent] = useState(false);
     return (
 
         detailsComponent ? (
-            <MovieDetails />
+            <MovieDetails src={sisu} title="Sisu" description="After an attempted attack on the school Budd’s kids attend, Montague worries about leaks in the department. But she may be in the line of fire herself" category="Crime" date="2024" close={() => setDetailsComponent(false)} />
             ) : (
                 <LinearGradient  colors={['black', 'black']} style={styles.gradient}>
                     <View style={styles.header}>
@@ -29,11 +31,11 @@ export default function Index() {
 
                     <ScrollView>
                         <FilterBar />
-                        <View style={{paddingTop: 20,}} >
+                        <View style={{paddingTop: 20,}}>
                             <FiveLastMovies />
                             <SectionTitle title='Last Movies' />
                             <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5}}>
-                                <MoviesCard src={movie3}/>
+                                <MoviesCard onPress={() => setDetailsComponent(true)} src={movie3}/>
                                 <MoviesCard src={movie2}/>
                                 <MoviesCard src={movie1}/>
                                 <MoviesCard src={movie}/>

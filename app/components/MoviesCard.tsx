@@ -1,13 +1,15 @@
 import React from 'react';
-import {ImageBackground, Text, View, StyleSheet, Image} from "react-native";
+import {ImageBackground, Text, View, StyleSheet, Image, Pressable} from "react-native";
 import logo from '../../assets/images/netIcon.png';
 
-function MoviesCard({ src }) {
+function MoviesCard({ src, onPress }) {
     return (
         <View style={styles.container}>
-            <ImageBackground source={src} style={styles.image} imageStyle={styles.imageBorder}>
-                <Image source={logo} style={{width: 30, height: 30, position: 'absolute', top: 0}} />
-            </ImageBackground>
+            <Pressable onPress={onPress}>
+                <ImageBackground source={src} style={styles.image} imageStyle={styles.imageBorder}>
+                    <Image source={logo} style={{width: 30, height: 30, position: 'absolute', top: 0}} />
+                </ImageBackground>
+            </Pressable>
         </View>
     );
 }
