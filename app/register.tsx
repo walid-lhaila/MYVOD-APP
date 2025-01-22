@@ -1,18 +1,41 @@
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useRouter} from "expo-router";
+import React, {useState} from "react";
+import {register} from "@/app/redux/slices/authSlice";
+import {useDispatch} from "react-redux";
 
 
 export default function Register (){
+    const dispatch = useDispatch();
     const router = useRouter();
+    const [formData, setFormData] = useState({
+        name: '',
+        phone: '',
+        email: '',
+        password: '',
+    });
+
+    const handleChange = (name: string, value: string) => {
+        setFormData({...formData, [name]: value});
+    };
+
+    const handleSubmit = async() => {
+        const result = await dispatch(register(formData));
+        if(register.fulfilled.match(result)) {
+            router.push('/login');
+        } else {
+            console.log('Login Failed');
+        }
+    }
     return (
         <View style={{ flex: 1, backgroundColor: 'black' }}>
             <View style={{ width: '90%', marginHorizontal: 'auto', gap: 20, paddingTop: 60}}>
-                <TextInput keyboardType="default" placeholder="Full Name" style={styles.input} />
-                <TextInput keyboardType="phone-pad"  placeholder="Phone Number" style={styles.input}/>
-                <TextInput keyboardType="email-address" placeholder="E-mail" style={styles.input} />
-                <TextInput secureTextEntry  placeholder="Password" style={styles.input} />
+                <TextInput onChangeText={(value) => handleChange('name', value)} value={formData.name} keyboardType="default" placeholder="Full Name" style={styles.input} />
+                <TextInput onChangeText={(value) => handleChange('phone', value)} value={formData.phone} keyboardType="phone-pad"  placeholder="Phone Number" style={styles.input}/>
+                <TextInput onChangeText={(value) => handleChange('email', value)} value={formData.email} keyboardType="email-address" placeholder="E-mail" style={styles.input} />
+                <TextInput onChangeText={(value) => handleChange('password', value)} value={formData.password} secureTextEntry  placeholder="Password" style={styles.input} />
                 <View>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                     <Text style={styles.buttonText}>Sign Up</Text>
                 </TouchableOpacity>
                     <Text style={styles.text}>OR</Text>
