@@ -11,48 +11,56 @@ import movie4 from '../../assets/images/nightagent.png';
 import FiveLastMovies from "@/app/components/FiveLastMovies";
 import SectionTitle from "@/app/components/SectionTitle";
 import MoviesCard from "@/app/components/MoviesCard";
+import {useState} from "react";
+import MovieDetails from "@/app/components/MovieDetails";
 
 export default function Index() {
+    const [detailsComponent, setDetailsComponent] = useState(true);
     return (
-        <LinearGradient  colors={['gold', 'black']} style={styles.gradient}>
-            <View style={styles.header}>
-                <Image style={styles.logo} source={netIcon} />
-                <Ionicons name={"search-outline"} color={"white"} size={35} />
-            </View>
 
-            <ScrollView>
-                <FilterBar />
-                <View style={{paddingTop: 20,}} >
-                   <FiveLastMovies />
-                   <SectionTitle title='Last Movies' />
-                    <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5}}>
-                        <MoviesCard src={movie3}/>
-                        <MoviesCard src={movie2}/>
-                        <MoviesCard src={movie1}/>
-                        <MoviesCard src={movie}/>
-                        <MoviesCard src={movie4}/>
-                    </ScrollView>
-                    <SectionTitle title='All Movies' />
-                    <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
-                        <MoviesCard src={movie3}/>
-                        <MoviesCard src={movie2}/>
-                        <MoviesCard src={movie1}/>
-                        <MoviesCard src={movie}/>
-                        <MoviesCard src={movie4}/>
-                    </ScrollView>
-                    <SectionTitle title='My List' />
-                    <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
-                        <MoviesCard src={movie3}/>
-                        <MoviesCard src={movie2}/>
-                        <MoviesCard src={movie1}/>
-                        <MoviesCard src={movie}/>
-                        <MoviesCard src={movie4}/>
-                    </ScrollView>
-                </View>
+        detailsComponent ? (
+            <MovieDetails />
+            ) : (
+                <LinearGradient  colors={['black', 'black']} style={styles.gradient}>
+                    <View style={styles.header}>
+                        <Image style={styles.logo} source={netIcon} />
+                        <Ionicons name={"search-outline"} color={"white"} size={35} />
+                    </View>
 
-            </ScrollView>
+                    <ScrollView>
+                        <FilterBar />
+                        <View style={{paddingTop: 20,}} >
+                            <FiveLastMovies />
+                            <SectionTitle title='Last Movies' />
+                            <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5}}>
+                                <MoviesCard src={movie3}/>
+                                <MoviesCard src={movie2}/>
+                                <MoviesCard src={movie1}/>
+                                <MoviesCard src={movie}/>
+                                <MoviesCard src={movie4}/>
+                            </ScrollView>
+                            <SectionTitle title='All Movies' />
+                            <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
+                                <MoviesCard src={movie3}/>
+                                <MoviesCard src={movie2}/>
+                                <MoviesCard src={movie1}/>
+                                <MoviesCard src={movie}/>
+                                <MoviesCard src={movie4}/>
+                            </ScrollView>
+                            <SectionTitle title='My List' />
+                            <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
+                                <MoviesCard src={movie3}/>
+                                <MoviesCard src={movie2}/>
+                                <MoviesCard src={movie1}/>
+                                <MoviesCard src={movie}/>
+                                <MoviesCard src={movie4}/>
+                            </ScrollView>
+                        </View>
 
-        </LinearGradient>
+                    </ScrollView>
+
+                </LinearGradient>
+            )
     );
 }
 
