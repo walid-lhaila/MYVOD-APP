@@ -1,17 +1,42 @@
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useRouter} from "expo-router";
-import React from "react";
+import React, {useState} from "react";
+import {useDispatch} from "react-redux";
+import {login} from "@/app/redux/slices/authSlice";
 
 
 export default function Login (){
+    const dispatch = useDispatch();
     const router = useRouter();
+
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    });
+
+    const handleChange = (name: string, value: string) => {
+        setFormData({...formData, [name]: value});
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const result = await dispatch(login(formData));
+            if (login.fulfilled.match(result)) {
+                router.push('(tab)');
+            } else {
+                console.error('Login failed:', result);
+            }
+        } catch (err) {
+            console.error('Error in handleSubmit:', err);
+        }
+    };
 
         return (
             <View style={{ flex: 1, backgroundColor: 'black' }}>
                 <View style={{ width: '90%', marginHorizontal: 'auto', gap: 20, paddingTop: 100}}>
-                    <TextInput keyboardType="email-address" placeholder="E-mail" style={styles.input} />
-                    <TextInput secureTextEntry  placeholder="Password" style={styles.input} />
-                    <TouchableOpacity onPress={() => router.push("(tab)")} style={styles.button}>
+                    <TextInput onChangeText={(value) => handleChange('email', value)} value={formData.email} keyboardType="email-address" placeholder="E-mail" style={styles.input} />
+                    <TextInput onChangeText={(value) => handleChange('password', value)} value={formData.password} secureTextEntry  placeholder="Password" style={styles.input} />
+                    <TouchableOpacity onPress={handleSubmit} style={styles.button}>
                         <Text style={styles.buttonText}>Sign In</Text>
                     </TouchableOpacity>
                     <View style={{paddingTop: 20}}>
