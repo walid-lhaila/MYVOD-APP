@@ -1,9 +1,15 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface UserData {
     name: string;
     phone: string;
+    email: string;
+    password: string;
+}
+
+interface LoginData {
     email: string;
     password: string;
 }
@@ -21,6 +27,7 @@ const initialState: AuthState = {
     isLoading: false,
     error: null,
 }
+
 export const register = createAsyncThunk(
     'auth/register',
     async(userData: UserData, {rejectWithValue}) => {
@@ -33,6 +40,23 @@ export const register = createAsyncThunk(
         }
     }
 );
+
+export const login = createAsyncThunk(
+    'auth/login',
+    async(loginData: LoginData, {rejectWithValue}) => {
+        try {
+            const response = await axios.post('http://192.168.1.4:2003/api/login', loginData);
+            const {token, user} = response.data;
+            AsyncStorage.setItem('token', token);
+            AsyncStorage.setItem('user', user.name);
+            AsyncStorage.setItem('id', user._id);
+            return { token, user };
+        } catch (error) {
+            console.error('Error:', error);
+            throw rejectWithValue(error.message || 'Something Went Wrong');
+        }
+    }
+)
 
 
 const authSlice = createSlice({
@@ -52,7 +76,20 @@ const authSlice = createSlice({
             .addCase(register.rejected, (state, action) => {
                 state.isLoading = true;
                 state.error = action.payload as string || 'Registration Failed';
-            });
+            })
+            .addCase(login.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(login.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.user = action.payload.user;
+                state.token = action.payload.token;
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload as string;
+            })
     },
 });
 
