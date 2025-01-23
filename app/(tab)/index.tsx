@@ -1,14 +1,13 @@
-import {Text, View, StyleSheet, Image, ScrollView, Pressable} from "react-native";
+import {View, StyleSheet, Image, ScrollView, Pressable, ActivityIndicator} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import netIcon from '../../assets/images/netIcon.png';
 import {LinearGradient} from "expo-linear-gradient";
 import FilterBar from "@/app/components/FilterBar";
 import movie3 from '../../assets/images/paint.png';
-import sisu from '../../assets/images/sisu.mp4';
 import FiveLastMovies from "@/app/components/FiveLastMovies";
 import SectionTitle from "@/app/components/SectionTitle";
 import MoviesCard from "@/app/components/MoviesCard";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import MovieDetails from "@/app/components/MovieDetails";
 import SearchComponents from "@/app/components/SearchComponents";
 import {useDispatch, useSelector} from "react-redux";
@@ -23,6 +22,7 @@ export default function Index() {
     useEffect(() => {
         dispatch(getAllMovies());
     }, [dispatch]);
+
 
     return (
 
@@ -92,5 +92,11 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: '100%',
         height: '100%',
+    },
+    loading: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black'
     },
 });

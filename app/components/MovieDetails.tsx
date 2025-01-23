@@ -26,6 +26,8 @@ function MovieDetails({close, movieId}) {
         );
     }
 
+
+
     if (!movieDetails) {
         return (
             <View style={styles.container}>
@@ -63,8 +65,8 @@ function MovieDetails({close, movieId}) {
                         <Text style={{color: 'white', fontFamily: 'sans', fontSize: 10}}>U/A</Text>
                     </View>
                     {movieDetails.categories && movieDetails.categories.length > 0 ? (
-                        movieDetails.categories.map((category, index) => (
-                            <Text key={index} style={{color: 'white', fontFamily: 'sans', fontSize: 17}}>{category.name}</Text>
+                        movieDetails.categories.map((category) => (
+                            <Text key={category._id} style={{color: 'white', fontFamily: 'sans', fontSize: 17}}>{category.name}</Text>
                         ))
                     ) : (
                         <Text></Text>
@@ -97,10 +99,15 @@ function MovieDetails({close, movieId}) {
                 <View style={{width: 60, height: 4, backgroundColor: 'red', marginTop: 16, marginLeft: 8}}></View>
                 <View style={{ paddingVertical: 20}}>
                     <ScrollView>
-                        <CommentsCard />
-                        <CommentsCard />
-                        <CommentsCard />
-                        <CommentsCard />
+                        {movieDetails.comments && movieDetails.comments.length > 0 ? (
+                            movieDetails.comments.map((comment) => (
+                                <CommentsCard key={comment._id} user={comment.client.name} comment={comment.comment} />
+                            ))
+                        ) : (
+                            <Text style={{ color: 'white', paddingHorizontal: 10, fontSize: 15 }}>
+                                No comments available.
+                            </Text>
+                        )}
                     </ScrollView>
                     <CommentsInput />
                 </View>
