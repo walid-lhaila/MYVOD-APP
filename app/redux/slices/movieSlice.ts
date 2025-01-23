@@ -25,8 +25,8 @@ export const getAllMovies  = createAsyncThunk(
             const updatedMovies = movies.map((movie) => {
                 return {
                     ...movie,
-                    picture: movie.picture.replace("127.0.0.1:9000", "192.168.9.132:9000"),
-                    trailer: movie.trailer.replace("127.0.0.1:9000", "192.168.9.132:9000"),
+                    picture: movie.picture.replace("127.0.0.1:9000", "192.168.1.4:9000"),
+                    trailer: movie.trailer.replace("127.0.0.1:9000", "192.168.1.4:9000"),
                 }
             })
             return updatedMovies
