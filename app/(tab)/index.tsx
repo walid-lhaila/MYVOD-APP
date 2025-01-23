@@ -8,18 +8,26 @@ import sisu from '../../assets/images/sisu.mp4';
 import FiveLastMovies from "@/app/components/FiveLastMovies";
 import SectionTitle from "@/app/components/SectionTitle";
 import MoviesCard from "@/app/components/MoviesCard";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import MovieDetails from "@/app/components/MovieDetails";
 import SearchComponents from "@/app/components/SearchComponents";
-
+import {useDispatch, useSelector} from "react-redux";
+import {getAllMovies} from "@/app/redux/slices/movieSlice";
 
 export default function Index() {
     const [detailsComponent, setDetailsComponent] = useState(false);
     const [search, setSearch] = useState(false);
+    const [selectedMovieId, setSelectedMovieId] = useState(null);
+    const dispatch = useDispatch();
+    const { movies } = useSelector((state) => state.movies);
+    useEffect(() => {
+        dispatch(getAllMovies());
+    }, [dispatch]);
+
     return (
 
         detailsComponent ? (
-            <MovieDetails src={sisu} title="Sisu" description="After an attempted attack on the school Budd’s kids attend, Montague worries about leaks in the department. But she may be in the line of fire herself" category="Crime" date="2024" close={() => setDetailsComponent(false)} />
+            <MovieDetails movieId={selectedMovieId}  close={() => {setDetailsComponent(false); setSelectedMovieId(null);}} />
             ) : (
                 <View style={{flex: 1}}>
                     {search ? (
@@ -43,7 +51,13 @@ export default function Index() {
                                     </ScrollView>
                                     <SectionTitle title='All Movies' />
                                     <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
-                                        <MoviesCard onPress={() => setDetailsComponent(true)} src={movie3}/>
+                                        {movies.map((movie) => (
+                                            <MoviesCard
+                                                key={movie._id}
+                                                onPress={() => {setDetailsComponent(true); setSelectedMovieId(movie._id)}}
+                                                src={movie.picture}
+                                            />
+                                        ))}
                                     </ScrollView>
                                     <SectionTitle title='My List' />
                                     <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
