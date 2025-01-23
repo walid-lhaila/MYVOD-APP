@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {View, StyleSheet, Image, Text, TouchableOpacity, Pressable, ScrollView} from 'react-native';
+import {View, StyleSheet, Image, Text, TouchableOpacity, Pressable, ScrollView, ActivityIndicator} from 'react-native';
 import { Video } from 'expo-av';
 import logo from '../../assets/images/netIcon.png';
 import {Ionicons} from "@expo/vector-icons";
@@ -10,7 +10,7 @@ import {getMovieById} from "@/app/redux/slices/movieSlice";
 
 function MovieDetails({close, movieId}) {
     const dispatch = useDispatch();
-    const { movieDetails } = useSelector((state) => state.movies);
+    const { movieDetails, isLoading } = useSelector((state) => state.movies);
 
     useEffect(() => {
         if (movieId) {
@@ -18,6 +18,23 @@ function MovieDetails({close, movieId}) {
         }
     }, [dispatch, movieId]);
 
+    if (isLoading) {
+        return (
+            <View style={styles.loading}>
+                <ActivityIndicator size="large" color="red" />
+            </View>
+        );
+    }
+
+    if (!movieDetails) {
+        return (
+            <View style={styles.container}>
+                <Text style={{ color: 'white', textAlign: 'center', marginTop: 20 }}>
+                    Movie details not found.
+                </Text>
+            </View>
+        );
+    }
 
     return (
         <View key={movieDetails._id} style={styles.container}>
@@ -141,6 +158,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontFamily: 'serif',
     },
-
+    loading: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black'
+    },
 
 });
