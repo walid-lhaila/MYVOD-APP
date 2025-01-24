@@ -15,23 +15,18 @@ const initialState: MovieState = {
     error: null,
 };
 
-interface CommentData {
-    movieId: string;
-    comment: string;
-}
-
 
 export const getAllMovies  = createAsyncThunk(
     'movies/getAll',
     async (_, {rejectWithValue}) => {
         try {
-            const response = await axios.get('http://192.168.9.132:2003/api/getAllMovies');
+            const response = await axios.get(`${process.env.EXPO_PUBLIC_NEST_URL}/api/getAllMovies`);
             const movies =  response.data.getAllMovie;
             const updatedMovies = movies.map((movie) => {
                 return {
                     ...movie,
-                    picture: movie.picture.replace("127.0.0.1:9000", "192.168.9.132:9000"),
-                    trailer: movie.trailer.replace("127.0.0.1:9000", "192.168.9.132:9000"),
+                    picture: movie.picture.replace("127.0.0.1", process.env.EXPO_PUBLIC_MINIO_URL),
+                    trailer: movie.trailer.replace("127.0.0.1", process.env.EXPO_PUBLIC_MINIO_URL),
                 }
             })
             return updatedMovies
@@ -44,10 +39,11 @@ export const getAllMovies  = createAsyncThunk(
 export const getMovieById = createAsyncThunk(
     'movies/getMovieById',
     async(movieId, {rejectWithValue}) => {
+        console.log(process.env.EXPO_PUBLIC_MINIO_URL)
         try {
-            const response = await axios.get(`http://192.168.9.132:2003/api/getMovieDetails/${movieId}`);
+            const response = await axios.get(`${process.env.EXPO_PUBLIC_NEST_URL}/api/getMovieDetails/${movieId}`);
             const updatedMovieDetails =  response.data.messsage;
-            updatedMovieDetails.trailer = updatedMovieDetails.trailer.replace("127.0.0.1", "192.168.9.132");
+            updatedMovieDetails.trailer = updatedMovieDetails.trailer.replace("127.0.0.1", process.env.EXPO_PUBLIC_MINIO_URL);
             return updatedMovieDetails;
         } catch (error) {
             return rejectWithValue(error.message || 'something Went Wrong');
@@ -56,25 +52,6 @@ export const getMovieById = createAsyncThunk(
 )
 
 
-export const addComment = createAsyncThunk(
-    'movies/acdComment',
-    async ({ movieId, comment, token }: CommentData & {token: string}, {rejectWithValue, dispatch}) => {
-        try {
-            const response = await axios.post(`http://192.168.9.132:2003/api/createComment/${movieId}`,
-                    { comment },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-            dispatch(getMovieById(movieId));
-            return response.data.movie;
-        } catch (error) {
-            return rejectWithValue(error.response?.data || 'something Went Wrong');
-        }
-    }
-)
 
 
 const movieSlice = createSlice({
@@ -106,17 +83,6 @@ const movieSlice = createSlice({
             .addCase(getMovieById.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload as string;
-            })
-            .addCase(addComment.pending, (state) => {
-                state.isLoading = true;
-                state.error = null;
-            })
-            .addCase(addComment.fulfilled, (state, action) => {
-                state.isLoading = false;
-            })
-            .addCase(addComment.rejected, (state, action) => {
-                state.isLoading = false;
-                state.error = action .payload as string;
             })
     },
 });

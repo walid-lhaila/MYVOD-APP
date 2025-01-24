@@ -32,7 +32,7 @@ export const register = createAsyncThunk(
     'auth/register',
     async(userData: UserData, {rejectWithValue}) => {
         try {
-            const response = await axios.post('http://192.168.9.132:2003/api/create', userData);
+            const response = await axios.post(`${process.env.EXPO_PUBLIC_NEST_URL}/api/create`, userData);
             return response.data;
         } catch (error) {
             console.error('Error:', error);
@@ -45,7 +45,8 @@ export const login = createAsyncThunk(
     'auth/login',
     async(loginData: LoginData, {rejectWithValue}) => {
         try {
-            const response = await axios.post('http://192.168.9.132:2003/api/login', loginData);
+            console.log(process.env.EXPO_PUBLIC_NEST_URL)
+            const response = await axios.post(`${process.env.EXPO_PUBLIC_NEST_URL}/api/login`, loginData);
             const {token, user} = response.data;
             AsyncStorage.setItem('token', token);
             AsyncStorage.setItem('user', user.name);

@@ -7,6 +7,7 @@ import CommentsCard from "@/app/components/CommentsCard";
 import CommentsInput from "@/app/components/CommentsInput";
 import {useDispatch, useSelector} from "react-redux";
 import {getMovieById} from "@/app/redux/slices/movieSlice";
+import FavoriteButton from "@/app/components/FavoriteButton";
 
 
 interface MovieDetailsProps {
@@ -83,10 +84,7 @@ function MovieDetails({close, movieId}: MovieDetailsProps) {
                         <Ionicons name={"play-sharp"} color="black" size={24} />
                         <Text style={styles.buttonText}>Play</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity  style={styles.button2}>
-                        <Ionicons name={"add-sharp"} color="white" size={24} />
-                        <Text style={styles.buttonText2}>List</Text>
-                    </TouchableOpacity>
+                    <FavoriteButton  movieId={movieDetails._id}  />
                 </View>
                 <Text style={{color: 'white', paddingHorizontal: 10, paddingTop: 8, fontSize: 15}}>{movieDetails.description}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '50%', paddingTop: 15, paddingHorizontal: 10}}>

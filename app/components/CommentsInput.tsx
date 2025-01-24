@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Alert, Pressable, StyleSheet, TextInput, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import {useDispatch} from "react-redux";
-import {addComment} from "@/app/redux/slices/movieSlice";
+import {addComment} from "@/app/redux/slices/commentSlice";
 import UseUserData from "@/app/hooks/useUserData";
 
 interface CommentsInputProps {
