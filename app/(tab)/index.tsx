@@ -12,18 +12,28 @@ import MovieDetails from "@/app/components/MovieDetails";
 import SearchComponents from "@/app/components/SearchComponents";
 import {useDispatch, useSelector} from "react-redux";
 import {getAllMovies} from "@/app/redux/slices/movieSlice";
+import {useNavigation} from "expo-router";
 
 export default function Index() {
     const [detailsComponent, setDetailsComponent] = useState(false);
     const [search, setSearch] = useState(false);
     const [selectedMovieId, setSelectedMovieId] = useState(null);
+    const navigation = useNavigation();
     const dispatch = useDispatch();
     const { movies } = useSelector((state) => state.movies);
+
     useEffect(() => {
         dispatch(getAllMovies());
     }, [dispatch]);
 
-
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("tabPress", () => {
+            setDetailsComponent(false);
+            setSearch(false);
+        });
+        return unsubscribe;
+    }, [navigation]);
+    
     return (
 
         detailsComponent ? (

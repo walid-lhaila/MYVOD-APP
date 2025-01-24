@@ -3,7 +3,8 @@ import {Ionicons} from "@expo/vector-icons";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useDispatch} from "react-redux";
 import UseUserData from "@/app/hooks/useUserData";
-import {addFavorite} from "@/app/redux/slices/favoriteSlice";
+import {addFavorite, getMyFavorits} from "@/app/redux/slices/favoriteSlice";
+import {useRouter} from "expo-router";
 
 interface FavoriteButtonProps {
     movieId: string;
@@ -14,10 +15,13 @@ function FavoriteButton({movieId}: FavoriteButtonProps) {
     const currentUser = UseUserData();
     const token = currentUser?.token;
 
+    const router = useRouter();
     const handleAddFavorite = async () => {
         try {
             await dispatch(addFavorite({ movieId, token }));
             console.log('FAVORITE ADDED SUCCESSFULLY');
+            await dispatch(getMyFavorits({token}));
+            router.push('/favoris');
         } catch (error) {
             console.log(error || 'FAILED TO ADD FAVORITE');
         }
