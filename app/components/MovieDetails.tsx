@@ -8,7 +8,12 @@ import CommentsInput from "@/app/components/CommentsInput";
 import {useDispatch, useSelector} from "react-redux";
 import {getMovieById} from "@/app/redux/slices/movieSlice";
 
-function MovieDetails({close, movieId}) {
+
+interface MovieDetailsProps {
+    close: () => void;
+    movieId: string;
+}
+function MovieDetails({close, movieId}: MovieDetailsProps) {
     const dispatch = useDispatch();
     const { movieDetails, isLoading } = useSelector((state) => state.movies);
 
@@ -64,13 +69,11 @@ function MovieDetails({close, movieId}) {
                     <View style={{backgroundColor: 'gray', paddingHorizontal: 1, paddingVertical: 1}}>
                         <Text style={{color: 'white', fontFamily: 'sans', fontSize: 10}}>U/A</Text>
                     </View>
-                    {movieDetails.categories && movieDetails.categories.length > 0 ? (
-                        movieDetails.categories.map((category) => (
-                            <Text key={category._id} style={{color: 'white', fontFamily: 'sans', fontSize: 17}}>{category.name}</Text>
-                        ))
-                    ) : (
-                        <Text></Text>
-                    )}
+                    {movieDetails.categories?.map((category) => (
+                        <Text key={category._id} style={{color: 'white', fontFamily: 'sans', fontSize: 17}}>
+                            {category.name}
+                        </Text>
+                    ))}
                     <View style={{backgroundColor: 'black', paddingHorizontal: 1, borderWidth: 1, borderColor: 'gray'}}>
                         <Text style={{color: 'white', fontFamily: 'sans', fontSize: 10}}>HD</Text>
                     </View>
@@ -99,7 +102,7 @@ function MovieDetails({close, movieId}) {
                 <View style={{width: 60, height: 4, backgroundColor: 'red', marginTop: 16, marginLeft: 8}}></View>
                 <View style={{ paddingVertical: 20}}>
                     <ScrollView>
-                        {movieDetails.comments && movieDetails.comments.length > 0 ? (
+                        {movieDetails.comments?.length > 0 ? (
                             movieDetails.comments.map((comment) => (
                                 <CommentsCard key={comment._id} user={comment.client.name} comment={comment.comment} />
                             ))
@@ -109,7 +112,7 @@ function MovieDetails({close, movieId}) {
                             </Text>
                         )}
                     </ScrollView>
-                    <CommentsInput />
+                    <CommentsInput movieId={movieDetails._id} />
                 </View>
             </ScrollView>
         </View>
