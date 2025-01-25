@@ -39,6 +39,25 @@
         }
     );
 
+    export const deleteFavorite = createAsyncThunk(
+        'favorite/deleteFavorite',
+        async ({movieId, token}: FavoriteData & {token: string}, {rejectWithValue}) => {
+            try {
+                const response = await axios.delete(`${process.env.EXPO_PUBLIC_NEST_URL}/api/deleteFavorite`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                            data: {movieId},
+                        }
+                    );
+                return response.data;
+            } catch (error) {
+                return rejectWithValue(error.response?.data || "Something went wrong");
+            }
+        }
+    )
+
     export const getMyFavorits = createAsyncThunk(
         "favorite/getMyFavorits",
         async ({token}: {token: string}, {rejectWithValue}) => {
@@ -97,6 +116,18 @@
                     state.error = null
                 })
                 .addCase(getMyFavorits.rejected, (state, action) => {
+                    state.isLoading = false;
+                    state.error = action.payload as string;
+                })
+                .addCase(deleteFavorite.pending, (state) => {
+                    state.isLoading = true;
+                    state.error = null;
+                 })
+                .addCase(deleteFavorite.fulfilled, (state, action) => {
+                    state.isLoading = false;
+                    state.error = null;
+                })
+                .addCase(deleteFavorite.rejected, (state, action) => {
                     state.isLoading = false;
                     state.error = action.payload as string;
                 })

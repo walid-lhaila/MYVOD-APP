@@ -36,7 +36,7 @@
                 </View>
                 <ScrollView>
                     {favorites?.map((favorite) => (
-                        <FavorisCard key={favorite._id} description={favorite.movie.description} title={favorite.movie.title} img={favorite.movie.picture} time={favorite.createdAt}  />
+                        <FavorisCard key={favorite._id} description={favorite.movie.description} title={favorite.movie.title} img={favorite.movie.picture} time={favorite.createdAt} movieId={favorite.movie._id}  />
                     ))}
                 </ScrollView>
             </View>
