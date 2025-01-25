@@ -1,4 +1,4 @@
-import {View, StyleSheet, Image, ScrollView, Pressable, ActivityIndicator} from "react-native";
+import {View, StyleSheet, Image, ScrollView, Pressable} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import netIcon from '../../assets/images/netIcon.png';
 import {LinearGradient} from "expo-linear-gradient";
@@ -13,6 +13,8 @@ import SearchComponents from "@/app/components/SearchComponents";
 import {useDispatch, useSelector} from "react-redux";
 import {getAllMovies} from "@/app/redux/slices/movieSlice";
 import {useNavigation} from "expo-router";
+import {getMyFavorits} from "@/app/redux/slices/favoriteSlice";
+import useUserData from "@/app/hooks/useUserData";
 
 export default function Index() {
     const [detailsComponent, setDetailsComponent] = useState(false);
@@ -20,7 +22,16 @@ export default function Index() {
     const [selectedMovieId, setSelectedMovieId] = useState(null);
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const currentUser = useUserData();
+    const token = currentUser?.token;
     const { movies } = useSelector((state) => state.movies);
+    const { favorites } = useSelector((state) => state.favorite);
+
+    useEffect(() => {
+        if(token) {
+            dispatch(getMyFavorits({ token }));
+        }
+    }, [dispatch, token])
 
     useEffect(() => {
         dispatch(getAllMovies());
@@ -71,7 +82,9 @@ export default function Index() {
                                     </ScrollView>
                                     <SectionTitle title='My List' />
                                     <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
-                                        <MoviesCard onPress={() => setDetailsComponent(true)} src={movie3}/>
+                                        {favorites?.map((favorite) => (
+                                            <MoviesCard key={favorite._id} onPress={() => {setDetailsComponent(true); setSelectedMovieId(favorite.movie._id)}}  src={favorite.movie.picture}/>
+                                        ))}
                                     </ScrollView>
                                 </View>
 
