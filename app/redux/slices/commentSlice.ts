@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import {getMovieById} from "@/app/redux/slices/movieSlice";
+import {rc2} from "node-forge";
+import startEncrypting = module
 
 interface CommentState {
     isLoading: boolean;
@@ -14,6 +16,7 @@ const initialState: CommentState = {
 
 interface CommentData {
     movieId: string;
+    commentId: string;
     comment: string;
 }
 
@@ -38,6 +41,25 @@ export const addComment = createAsyncThunk(
     }
 );
 
+export const deleteComment = createAsyncThunk(
+    'comments/deleteComment',
+    async ({movieId, commentId, token}: CommentData& {token: string}, {rejectWithValue, dispatch}) => {
+        try {
+            const response = await axios.delete(`${process.env.EXPO_PUBLIC_NEST_URL}/api/deleteComment/${movieId}/${commentId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+            dispatch(getMovieById(movieId));
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || "Something went wrong");
+        }
+    }
+)
+
 const commentSlice = createSlice({
     name: "comments",
     initialState,
@@ -54,7 +76,19 @@ const commentSlice = createSlice({
             .addCase(addComment.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload as string;
-            });
+            })
+            .addCase(deleteComment.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(deleteComment.fulfilled, (state) => {
+                state.isLoading = false;
+                state.error = null;
+            })
+            .addCase(deleteComment.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload as string;
+            })
     },
 });
 

@@ -43,7 +43,7 @@ function FavorisCard({title, time, description, img, movieId}: FavorisCardProps)
                     </View>
                 </View>
                 <Pressable onPress={handleDelete}>
-                    <Ionicons name={"remove-sharp"} color={"white"} size={25} />
+                    <Ionicons name={"trash-sharp"} color={"white"} size={23} />
                 </Pressable>
             </View>
                 <Text style={{color: '#BCC6CC', paddingHorizontal: 10, paddingTop: 3, fontSize: 12}}>{truncatedDescription}</Text>

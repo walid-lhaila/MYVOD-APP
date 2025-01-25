@@ -102,7 +102,7 @@ function MovieDetails({close, movieId}: MovieDetailsProps) {
                     <ScrollView>
                         {movieDetails.comments?.length > 0 ? (
                             movieDetails.comments.map((comment) => (
-                                <CommentsCard key={comment._id} user={comment.client.name} comment={comment.comment} />
+                                <CommentsCard key={comment._id} user={comment.client.name} comment={comment.comment} movieId={movieDetails._id} commentId={comment._id} />
                             ))
                         ) : (
                             <Text style={{ color: 'white', paddingHorizontal: 10, fontSize: 15 }}>
