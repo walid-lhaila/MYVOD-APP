@@ -1,7 +1,33 @@
 import { Pressable, StyleSheet, Text, View, TouchableWithoutFeedback} from 'react-native';
 import {AirbnbRating} from "react-native-ratings";
+import {useDispatch} from "react-redux";
+import {addRating} from "@/app/redux/slices/ratingSlice";
+import UseUserData from "@/app/hooks/useUserData";
+import {useState} from "react";
+import {getMovieById} from "@/app/redux/slices/movieSlice";
 
-function RatingCard({visible, onClose, defaultRating = 3}) {
+function RatingCard({visible, onClose, defaultRating = 3, movieId}) {
+    const currentUser = UseUserData();
+    const token = currentUser?.token;
+    const client = currentUser?._id;
+    const dispatch = useDispatch();
+    const [rating, setRating] = useState(defaultRating)
+
+    const handleAddRating = async () => {
+        try {
+            await dispatch(addRating({movieId, client, token, rating}));
+            console.log("rating success");
+            await dispatch(getMovieById(movieId));
+            onClose();
+        } catch (error) {
+            console.log("rating failed");
+        }
+    }
+
+    const handleRatingChange = (newRating) => {
+        setRating(newRating);
+    };
+
     if (!visible) return null;
 
     return (
@@ -10,8 +36,11 @@ function RatingCard({visible, onClose, defaultRating = 3}) {
                 <View style={styles.card} onStartShouldSetResponder={(e) => {e.stopPropagation(); return false}}>
                     <Text style={styles.title}>Rate This Movie</Text>
                     <View style={styles.starsContainer}>
-                           <AirbnbRating count={5} defaultRating={defaultRating}  size={24} showRating={false} isDisabled={false} starContainerStyle={styles.star} />
+                           <AirbnbRating count={5} defaultRating={rating}  size={24} showRating={false} isDisabled={false} starContainerStyle={styles.star} onFinishRating={handleRatingChange} />
                     </View>
+                    <Pressable onPress={handleAddRating} >
+                        <Text>Submit Rating</Text>
+                    </Pressable>
                 </View>
             </View>
         </TouchableWithoutFeedback>
