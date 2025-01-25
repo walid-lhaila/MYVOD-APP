@@ -2,7 +2,7 @@ import React from 'react';
 import { Image } from 'expo-image';
 import {Pressable, Text, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {deleteFavorite, getMyFavorits} from "@/app/redux/slices/favoriteSlice";
 import UseUserData from "@/app/hooks/useUserData";
 
