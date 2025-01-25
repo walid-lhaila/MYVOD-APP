@@ -4,7 +4,7 @@ import {Ionicons} from "@expo/vector-icons";
 import SearchCardResult from "@/app/components/SearchCardResult";
 
 
-function SearchComponents({close, allMovies}) {
+function SearchComponents({close, allMovies, onMovieSelect}) {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
 
@@ -45,11 +45,9 @@ function SearchComponents({close, allMovies}) {
                   </Text>
                   {results.length > 0 ? (
                       results.map((movie) => (
-                          <SearchCardResult
-                              key={movie._id}
-                              title={movie.title}
-                              picture={movie.picture}
-                          />
+                          <Pressable key={movie._id}  onPress={() => onMovieSelect(movie._id)}>
+                            <SearchCardResult title={movie.title} picture={movie.picture}/>
+                          </Pressable>
                       ))
                   ) : (
                       <Text style={{ color: '#888B90', fontSize: 16, textAlign: 'center' }}>

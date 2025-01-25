@@ -52,7 +52,7 @@ export default function Index() {
             ) : (
                 <View style={{flex: 1}}>
                     {search ? (
-                        <SearchComponents allMovies={movies} close={() => setSearch(false)} />
+                        <SearchComponents allMovies={movies} close={() => setSearch(false)} onMovieSelect={(movieId) => {setDetailsComponent(true); setSelectedMovieId(movieId); setSearch(false)}} />
                     ) : (
                         <LinearGradient  colors={['black', 'black']} style={styles.gradient}>
                             <View style={styles.header}>
