@@ -1,21 +1,22 @@
 import React from 'react';
-import {StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 
-function FilterBar() {
+function FilterBar({onPrese}) {
+
     return (
-        <View style={{flexDirection: 'row', justifyContent: 'start', paddingHorizontal: 10 , gap: 15, paddingTop: 20}}>
-            <View style={styles.category}>
-                <Text style={{color: 'white', fontWeight: 'medium', fontSize: 15}}>TV Shows</Text>
+            <View style={{flexDirection: 'row', justifyContent: 'start', paddingHorizontal: 10 , gap: 15, paddingTop: 20}}>
+                <View style={styles.category}>
+                    <Text style={{color: 'white', fontWeight: 'medium', fontSize: 15}}>TV Shows</Text>
+                </View>
+                <View style={styles.category}>
+                    <Text style={{color: 'white', fontWeight: 'medium', fontSize: 15}}>Movies</Text>
+                </View>
+                <TouchableOpacity onPress={onPrese} style={styles.categories}>
+                    <Text style={{color: 'white', fontWeight: 'medium', fontSize: 15}}>Categories</Text>
+                    <Ionicons name={"arrow-down"} size={15} color={"white"} />
+                </TouchableOpacity>
             </View>
-            <View style={styles.category}>
-                <Text style={{color: 'white', fontWeight: 'medium', fontSize: 15}}>Movies</Text>
-            </View>
-            <View style={styles.categories}>
-                <Text style={{color: 'white', fontWeight: 'medium', fontSize: 15}}>Categories</Text>
-                <Ionicons name={"arrow-down"} size={15} color={"white"} />
-            </View>
-        </View>
     );
 }
 

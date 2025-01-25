@@ -15,6 +15,7 @@ import {getAllMovies} from "@/app/redux/slices/movieSlice";
 import {useNavigation} from "expo-router";
 import {getMyFavorits} from "@/app/redux/slices/favoriteSlice";
 import useUserData from "@/app/hooks/useUserData";
+import AllCategories from "@/app/components/AllCategories";
 
 export default function Index() {
     const [detailsComponent, setDetailsComponent] = useState(false);
@@ -26,6 +27,11 @@ export default function Index() {
     const token = currentUser?.token;
     const { movies } = useSelector((state) => state.movies);
     const { favorites } = useSelector((state) => state.favorite);
+    const [categoriesVisible, setCategoriesVisible] = useState(false);
+
+    const toggleCategoriesContent = () => {
+        setCategoriesVisible(!categoriesVisible);
+    }
 
     useEffect(() => {
         if(token) {
@@ -62,8 +68,10 @@ export default function Index() {
                                 </Pressable>
                             </View>
 
+                            <AllCategories visible={categoriesVisible} onClose={() => setCategoriesVisible(false)}  />
+
                             <ScrollView>
-                                <FilterBar />
+                                <FilterBar onPrese={toggleCategoriesContent} />
                                 <View style={{paddingTop: 20,}}>
                                     <FiveLastMovies />
                                     <SectionTitle title='Last Movies'/>
