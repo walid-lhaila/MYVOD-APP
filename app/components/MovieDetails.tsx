@@ -53,7 +53,7 @@ function MovieDetails({close, movieId}: MovieDetailsProps) {
 
     return (
         <View key={movieDetails._id} style={styles.container}>
-            <RatingCard visible={ratingVisible} onClose={() => setRatingVisible(false)} />
+            <RatingCard movieId={movieDetails._id} visible={ratingVisible} onClose={() => setRatingVisible(false)} />
 
             <Pressable onPress={close} style={{backgroundColor: 'black', position: 'absolute', top: 40, right: 13, zIndex: 1, borderRadius: 50, opacity: 0.8}}>
                 <Ionicons name={"close-sharp"} size={27} color={"white"} />

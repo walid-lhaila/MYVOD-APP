@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice';
 import movieReducer from './slices/movieSlice';
 import commentReducer from './slices/commentSlice';
 import favoriteReducer from './slices/favoriteSlice';
+import ratingReducer from './slices/ratingSlice';
 
 export const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
         movies: movieReducer,
         comments: commentReducer,
         favorite: favoriteReducer,
+        rating: ratingReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
