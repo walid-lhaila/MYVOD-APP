@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity, Pressable, ScrollView, ActivityIndicator} from 'react-native';
 import { Video } from 'expo-av';
 import logo from '../../assets/images/netIcon.png';
@@ -8,6 +8,7 @@ import CommentsInput from "@/app/components/CommentsInput";
 import {useDispatch, useSelector} from "react-redux";
 import {getMovieById} from "@/app/redux/slices/movieSlice";
 import FavoriteButton from "@/app/components/FavoriteButton";
+import RatingCard from "@/app/components/RatingCard";
 
 
 interface MovieDetailsProps {
@@ -23,6 +24,12 @@ function MovieDetails({close, movieId}: MovieDetailsProps) {
             dispatch(getMovieById(movieId));
         }
     }, [dispatch, movieId]);
+
+    const [ratingVisible, setRatingVisible] = useState(false);
+
+    const toggleRatingCard = () => {
+        setRatingVisible(!ratingVisible);
+    };
 
     if (isLoading) {
         return (
@@ -46,6 +53,8 @@ function MovieDetails({close, movieId}: MovieDetailsProps) {
 
     return (
         <View key={movieDetails._id} style={styles.container}>
+            <RatingCard visible={ratingVisible} onClose={() => setRatingVisible(false)} />
+
             <Pressable onPress={close} style={{backgroundColor: 'black', position: 'absolute', top: 40, right: 13, zIndex: 1, borderRadius: 50, opacity: 0.8}}>
                 <Ionicons name={"close-sharp"} size={27} color={"white"} />
             </Pressable>
@@ -65,20 +74,31 @@ function MovieDetails({close, movieId}: MovieDetailsProps) {
                     <Text style={{ color: 'white', fontFamily: 'serif', fontSize: 11  }}>Movies</Text>
                 </View>
                 <Text style={{ color: 'white', fontFamily: 'georgia', fontWeight: 900, fontSize: 22, paddingHorizontal: 10}}>{movieDetails.title}</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 10, paddingTop: 5}}>
-                    <Text style={{color: 'white', fontFamily: 'sans', fontSize: 17}}>2025</Text>
-                    <View style={{backgroundColor: 'gray', paddingHorizontal: 1, paddingVertical: 1}}>
-                        <Text style={{color: 'white', fontFamily: 'sans', fontSize: 10}}>U/A</Text>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 10, paddingTop: 5}}>
+                        <Text style={{color: 'white', fontFamily: 'sans', fontSize: 17}}>2025</Text>
+                        <View style={{backgroundColor: 'gray', paddingHorizontal: 1, paddingVertical: 1}}>
+                            <Text style={{color: 'white', fontFamily: 'sans', fontSize: 10}}>U/A</Text>
+                        </View>
+                        {movieDetails.categories?.map((category) => (
+                            <Text key={category._id} style={{color: 'white', fontFamily: 'sans', fontSize: 17}}>
+                                {category.name}
+                            </Text>
+                        ))}
+                        <View style={{backgroundColor: 'black', paddingHorizontal: 1, borderWidth: 1, borderColor: 'gray'}}>
+                            <Text style={{color: 'white', fontFamily: 'sans', fontSize: 10}}>HD</Text>
+                        </View>
+                        {movieDetails.movieRating > 0 ? (
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, marginLeft: 10}}>
+                                <Text style={{color: 'white', fontFamily: 'sans', fontSize: 17}}>{movieDetails.movieRating}</Text>
+                                <Ionicons name={"star-sharp"} color={'gold'} size={21} />
+                            </View>
+                        ) : (
+                            <Text></Text>
+                        )}
                     </View>
-                    {movieDetails.categories?.map((category) => (
-                        <Text key={category._id} style={{color: 'white', fontFamily: 'sans', fontSize: 17}}>
-                            {category.name}
-                        </Text>
-                    ))}
-                    <View style={{backgroundColor: 'black', paddingHorizontal: 1, borderWidth: 1, borderColor: 'gray'}}>
-                        <Text style={{color: 'white', fontFamily: 'sans', fontSize: 10}}>HD</Text>
-                    </View>
-                </View>
+
+
                 <View style={{ paddingTop: 10, gap: 8}}>
                     <TouchableOpacity  style={styles.button}>
                         <Ionicons name={"play-sharp"} color="black" size={24} />
@@ -87,11 +107,11 @@ function MovieDetails({close, movieId}: MovieDetailsProps) {
                     <FavoriteButton  movieId={movieDetails._id}  />
                 </View>
                 <Text style={{color: 'white', paddingHorizontal: 10, paddingTop: 8, fontSize: 15}}>{movieDetails.description}</Text>
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '50%', paddingTop: 15, paddingHorizontal: 10}}>
-                    <View style={{ alignItems: 'center'}}>
-                        <Ionicons name={"heart-outline"} color="white" size={32} />
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '45%', paddingTop: 15, paddingHorizontal: 10}}>
+                    <Pressable onPress={toggleRatingCard} style={{ alignItems: 'center'}}>
+                        <Ionicons name={"star-outline"} color="white" size={32} />
                         <Text style={{color: '#B6B6B4', fontSize: 16, fontFamily: 'serif'}}>Rate</Text>
-                    </View>
+                    </Pressable>
                     <View style={{ alignItems: 'center'}}>
                         <Ionicons name={"chatbox-outline"} color="white" size={32} />
                         <Text style={{color: '#B6B6B4', fontSize: 16, fontFamily: 'serif'}}>Comment</Text>
