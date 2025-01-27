@@ -5,18 +5,30 @@ import {LinearGradient} from "expo-linear-gradient";
 import AllCategories from "@/app/components/AllCategories";
 import {Ionicons} from "@expo/vector-icons";
 import CategoryCardResult from "@/app/components/CategoryCardResult";
+import MovieDetails from "@/app/components/MovieDetails";
 
 function CategoryComponents({close, selectedCategory}) {
     const [categoriesVisible, setCategoriesVisible] = useState(false);
+    const [selectedMovie, setSelectedMovie] = useState(null);
 
     const toggleCategoriesContent = () => {
         setCategoriesVisible(!categoriesVisible);
     }
 
+    const handleShowDetails = (movie) => {
+        setSelectedMovie(movie);
+    };
+
+    const handleCloseDetails = () => {
+        setSelectedMovie(null);
+    };
+
     return (
         <View style={{ flex: 1 }}>
+            {selectedMovie ? (
+                <MovieDetails close={handleCloseDetails} movieId={selectedMovie._id} />
+            ) : (
             <LinearGradient colors={['gray', 'black']} style={styles.gradient}>
-
                 <View style={styles.header}>
                     <Image style={styles.logo} source={netIcon} />
                 </View>
@@ -26,17 +38,14 @@ function CategoryComponents({close, selectedCategory}) {
                             <Ionicons name={"close-sharp"} color={"white"} size={20} />
                         </Pressable>
                         <TouchableOpacity onPress={toggleCategoriesContent} style={styles.categories}>
-                            <Text style={{color: 'white', fontWeight: 'medium', fontSize: 15}}>Categories</Text>
-                            <Ionicons name={"arrow-down"} size={15} color={"white"} />
+                            <Text style={{color: 'white', fontWeight: 'medium', fontSize: 15}}>{selectedCategory}</Text>
                         </TouchableOpacity>
                     </View>
-
-                <AllCategories  visible={categoriesVisible} onClose={() => setCategoriesVisible(false)}/>
-
                 <View>
-                    <CategoryCardResult selectedCategory={selectedCategory} />
+                    <CategoryCardResult selectedCategory={selectedCategory} onShowDetails={handleShowDetails} />
                 </View>
             </LinearGradient>
+                )}
         </View>
     );
 }

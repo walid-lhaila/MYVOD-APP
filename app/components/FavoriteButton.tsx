@@ -1,34 +1,17 @@
 import React from 'react';
 import {Ionicons} from "@expo/vector-icons";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {useDispatch} from "react-redux";
-import UseUserData from "@/app/hooks/useUserData";
-import {addFavorite, getMyFavorits} from "@/app/redux/slices/favoriteSlice";
-import {useRouter} from "expo-router";
+import {useFavorite} from "@/app/hooks/useFavorite";
 
 interface FavoriteButtonProps {
     movieId: string;
 }
 
 function FavoriteButton({movieId}: FavoriteButtonProps) {
-    const dispatch = useDispatch();
-    const currentUser = UseUserData();
-    const token = currentUser?.token;
-
-    const router = useRouter();
-    const handleAddFavorite = async () => {
-        try {
-            await dispatch(addFavorite({ movieId, token }));
-            console.log('FAVORITE ADDED SUCCESSFULLY');
-            await dispatch(getMyFavorits({token}));
-            router.push('/favoris');
-        } catch (error) {
-            console.log(error || 'FAILED TO ADD FAVORITE');
-        }
-    };
+            const {handleAddFavorite} = useFavorite();
     return (
         <View>
-            <TouchableOpacity onPress={handleAddFavorite} style={styles.button2}>
+            <TouchableOpacity onPress={() => handleAddFavorite(movieId)} style={styles.button2}>
                 <Ionicons name={"add-sharp"} color="white" size={24} />
                 <Text style={styles.buttonText2}>List</Text>
             </TouchableOpacity>
