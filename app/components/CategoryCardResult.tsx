@@ -1,32 +1,35 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image} from 'expo-image';
 import { Text, TouchableOpacity, View, ScrollView, StyleSheet} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import {useSelector} from "react-redux";
+import {useFavorite} from "@/app/hooks/useFavorite";
+import MovieDetails from "@/app/components/MovieDetails";
 
-export default function CategoryCardResult({ selectedCategory }) {
-
+export default function CategoryCardResult({ selectedCategory, onShowDetails }) {
+    const {handleAddFavorite} = useFavorite();
     const {movies} = useSelector((state) => state.movies);
     const filteredMovies = selectedCategory ? movies.filter((movie) => movie.categories.some((category) => category.name === selectedCategory)) : movies;
+
     return (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
-            {filteredMovies.map((movie) => (
-                <View key={movie._id} style={styles.card}>
-                    <Image source={{uri: movie.picture}} style={styles.image} />
-                    <Text style={styles.title}>{movie.title}</Text>
-                    <View style={styles.actions}>
-                        <TouchableOpacity style={styles.actionButton}>
-                            <Ionicons name={"add-circle-outline"} color={"white"} size={25} />
-                            <Text style={styles.actionText}>My List</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.actionButton}>
-                            <Ionicons name={"information-circle-outline"} color={"white"} size={25} />
-                            <Text style={styles.actionText}>Info</Text>
-                        </TouchableOpacity>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+                {filteredMovies.map((movie) => (
+                    <View key={movie._id} style={styles.card}>
+                        <Image source={{uri: movie.picture}} style={styles.image} />
+                        <Text style={styles.title}>{movie.title}</Text>
+                        <View style={styles.actions}>
+                            <TouchableOpacity onPress={() => handleAddFavorite(movie._id)} style={styles.actionButton}>
+                                <Ionicons name={"add-circle-outline"} color={"white"} size={25} />
+                                <Text style={styles.actionText}>My List</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => onShowDetails(movie)} style={styles.actionButton}>
+                                <Ionicons name={"information-circle-outline"} color={"white"} size={25} />
+                                <Text style={styles.actionText}>Info</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-            ))}
-        </ScrollView>
+                ))}
+            </ScrollView>
     );
 }
 
