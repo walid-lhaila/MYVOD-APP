@@ -6,7 +6,7 @@ import AllCategories from "@/app/components/AllCategories";
 import {Ionicons} from "@expo/vector-icons";
 import CategoryCardResult from "@/app/components/CategoryCardResult";
 
-function CategoryComponents({close, event}) {
+function CategoryComponents({close, selectedCategory}) {
     const [categoriesVisible, setCategoriesVisible] = useState(false);
 
     const toggleCategoriesContent = () => {
@@ -31,10 +31,10 @@ function CategoryComponents({close, event}) {
                         </TouchableOpacity>
                     </View>
 
-                <AllCategories onPress={event}  visible={categoriesVisible} onClose={() => setCategoriesVisible(false)}/>
+                <AllCategories  visible={categoriesVisible} onClose={() => setCategoriesVisible(false)}/>
 
                 <View>
-                    <CategoryCardResult />
+                    <CategoryCardResult selectedCategory={selectedCategory} />
                 </View>
             </LinearGradient>
         </View>

@@ -23,6 +23,7 @@ export default function Index() {
     const [search, setSearch] = useState(false);
     const [categoryComponents,  setCategoryComponents] = useState(false);
     const [selectedMovieId, setSelectedMovieId] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const currentUser = useUserData();
@@ -61,7 +62,7 @@ export default function Index() {
             <SearchComponents allMovies={movies} close={() => setSearch(false)} onMovieSelect={(movieId) => { setDetailsComponent(true); setSelectedMovieId(movieId); setSearch(false);}}
             />
         ) : categoryComponents ? (
-            <CategoryComponents removeCategories={() => setCategoriesVisible(false)} close={() => setCategoryComponents(false)}/>
+            <CategoryComponents selectedCategory={selectedCategory} removeCategories={() => setCategoriesVisible(false)} close={() => setCategoryComponents(false)} />
         ) : (
             <View style={{ flex: 1 }}>
                 <LinearGradient colors={['gold', 'black']} style={styles.gradient}>
@@ -72,7 +73,7 @@ export default function Index() {
                         </Pressable>
                     </View>
 
-                    <AllCategories onPress={() => setCategoryComponents(true)} visible={categoriesVisible} onClose={() => setCategoriesVisible(false)}/>
+                    <AllCategories onPress={(selectedCategoryName) => {setCategoryComponents(true); setSelectedCategory(selectedCategoryName)}} visible={categoriesVisible} onClose={() => setCategoriesVisible(false)}/>
 
                     <ScrollView>
                         <FilterBar onPrese={toggleCategoriesContent} />

@@ -1,4 +1,4 @@
-import {Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
+import {Pressable, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
@@ -22,7 +22,7 @@ function AllCategories({visible, onClose, onPress}) {
                         {categories.map((category) => (
                             <TouchableWithoutFeedback key={category._id}>
                                 <View style={styles.categoryItem}>
-                                    <Text onPress={onPress} style={styles.categoryText}>{category.name}</Text>
+                                    <Text onPress={() => {onPress(category.name); onClose()}} style={styles.categoryText}>{category.name}</Text>
                                 </View>
                             </TouchableWithoutFeedback>
                         ))}

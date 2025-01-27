@@ -1,27 +1,31 @@
 import React from 'react';
-import {Image, Text, TouchableOpacity, View, ScrollView, StyleSheet} from "react-native";
-import bg from "@/assets/images/bg.jpeg";
+import {Image} from 'expo-image';
+import { Text, TouchableOpacity, View, ScrollView, StyleSheet} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
+import {useSelector} from "react-redux";
 
-export default function CategoryCardResult() {
+export default function CategoryCardResult({ selectedCategory }) {
+
+    const {movies} = useSelector((state) => state.movies);
+    const filteredMovies = selectedCategory ? movies.filter((movie) => movie.categories.some((category) => category.name === selectedCategory)) : movies;
     return (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
-            {/* Movie 1 */}
-            <View style={styles.card}>
-                <Image source={bg} style={styles.image} />
-                <Text style={styles.title}>Code Name Triranga</Text>
-                <View style={styles.actions}>
-                    <TouchableOpacity style={styles.actionButton}>
-                        <Ionicons name={"add-circle-outline"} color={"white"} size={25} />
-                        <Text style={styles.actionText}>My List</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
-                        <Ionicons name={"information-circle-outline"} color={"white"} size={25} />
-                        <Text style={styles.actionText}>Info</Text>
-                    </TouchableOpacity>
+            {filteredMovies.map((movie) => (
+                <View key={movie._id} style={styles.card}>
+                    <Image source={{uri: movie.picture}} style={styles.image} />
+                    <Text style={styles.title}>{movie.title}</Text>
+                    <View style={styles.actions}>
+                        <TouchableOpacity style={styles.actionButton}>
+                            <Ionicons name={"add-circle-outline"} color={"white"} size={25} />
+                            <Text style={styles.actionText}>My List</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.actionButton}>
+                            <Ionicons name={"information-circle-outline"} color={"white"} size={25} />
+                            <Text style={styles.actionText}>Info</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
-
+            ))}
         </ScrollView>
     );
 }
