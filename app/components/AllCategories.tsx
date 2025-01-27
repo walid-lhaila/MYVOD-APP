@@ -1,31 +1,17 @@
-import {Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
+import {Pressable, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {getAllCategories} from "@/app/redux/slices/categorySlice";
 
+function AllCategories({visible, onClose, onPress}) {
 
-const categories = [
-    "Available for Download",
-    "Netflix Originals",
-    "TV Shows",
-    "Action",
-    "Anime",
-    "Children & Family",
-    "Classics",
-    "Comedies",
-    "Documentaries",
-    "Dramas",
-    "Horror",
-    "Independent",
-    "Anime",
-    "Children & Family",
-    "Classics",
-    "Comedies",
-    "Documentaries",
-    "Dramas",
-    "Horror",
-]
+    const dispatch = useDispatch();
+    const {categories}  = useSelector((state) => state.categories);
 
-
-function AllCategories({visible, onClose}) {
+    useEffect(() => {
+        dispatch(getAllCategories())
+    }, [dispatch])
 
     if (!visible) return null;
     return (
@@ -33,15 +19,15 @@ function AllCategories({visible, onClose}) {
             <View style={styles.overlay}>
                 <View style={styles.content} onStartShouldSetResponder={(e) => {e.stopPropagation(); return false}}>
                     <ScrollView>
-                        {categories.map((category, index) => (
-                            <TouchableWithoutFeedback key={index}>
+                        {categories.map((category) => (
+                            <TouchableWithoutFeedback key={category._id}>
                                 <View style={styles.categoryItem}>
-                                    <Text style={styles.categoryText}>{category}</Text>
+                                    <Text onPress={() => {onPress(category.name); onClose()}} style={styles.categoryText}>{category.name}</Text>
                                 </View>
                             </TouchableWithoutFeedback>
                         ))}
                     </ScrollView>
-                        <Pressable onPress={onClose} style={{backgroundColor: 'white', width: 70, height: 70, borderRadius: 50, margin: 'auto', alignItems: 'center', justifyContent: 'center'}}>
+                        <Pressable onPress={onClose} style={{backgroundColor: 'white', width: 60, height: 60, borderRadius: 50, margin: 'auto', alignItems: 'center', justifyContent: 'center'}}>
                             <Ionicons name={"close-sharp"} size={35} color={"black"} />
                         </Pressable>
                 </View>
@@ -66,6 +52,7 @@ const styles = StyleSheet.create({
         zIndex: 2,
     },
     content: {
+        marginTop: 25,
         width: 250,
         height: 650,
     },

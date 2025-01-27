@@ -16,11 +16,14 @@ import {useNavigation} from "expo-router";
 import {getMyFavorits} from "@/app/redux/slices/favoriteSlice";
 import useUserData from "@/app/hooks/useUserData";
 import AllCategories from "@/app/components/AllCategories";
+import CategoryComponents from "@/app/components/CategoryComponents";
 
 export default function Index() {
     const [detailsComponent, setDetailsComponent] = useState(false);
     const [search, setSearch] = useState(false);
+    const [categoryComponents,  setCategoryComponents] = useState(false);
     const [selectedMovieId, setSelectedMovieId] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const currentUser = useUserData();
@@ -50,57 +53,64 @@ export default function Index() {
         });
         return unsubscribe;
     }, [navigation]);
-    
+
     return (
-
         detailsComponent ? (
-            <MovieDetails movieId={selectedMovieId}  close={() => {setDetailsComponent(false); setSelectedMovieId(null);}} />
-            ) : (
-                <View style={{flex: 1}}>
-                    {search ? (
-                        <SearchComponents allMovies={movies} close={() => setSearch(false)} onMovieSelect={(movieId) => {setDetailsComponent(true); setSelectedMovieId(movieId); setSearch(false)}} />
-                    ) : (
-                        <LinearGradient  colors={['black', 'black']} style={styles.gradient}>
-                            <View style={styles.header}>
-                                <Image style={styles.logo} source={netIcon} />
-                                <Pressable onPress={() => setSearch(true)}>
-                                    <Ionicons name={"search-outline"} color={"white"} size={35} />
-                                </Pressable>
-                            </View>
+            <MovieDetails movieId={selectedMovieId} close={() => { setDetailsComponent(false); setSelectedMovieId(null); }}
+            />
+        ) : search ? (
+            <SearchComponents allMovies={movies} close={() => setSearch(false)} onMovieSelect={(movieId) => { setDetailsComponent(true); setSelectedMovieId(movieId); setSearch(false);}}
+            />
+        ) : categoryComponents ? (
+            <CategoryComponents selectedCategory={selectedCategory} removeCategories={() => setCategoriesVisible(false)} close={() => setCategoryComponents(false)} />
+        ) : (
+            <View style={{ flex: 1 }}>
+                <LinearGradient colors={['gold', 'black']} style={styles.gradient}>
+                    <View style={styles.header}>
+                        <Image style={styles.logo} source={netIcon} />
+                        <Pressable onPress={() => setSearch(true)}>
+                            <Ionicons name={"search-outline"} color={"white"} size={35} />
+                        </Pressable>
+                    </View>
 
-                            <AllCategories visible={categoriesVisible} onClose={() => setCategoriesVisible(false)}  />
+                    <AllCategories onPress={(selectedCategoryName) => {setCategoryComponents(true); setSelectedCategory(selectedCategoryName)}} visible={categoriesVisible} onClose={() => setCategoriesVisible(false)}/>
 
-                            <ScrollView>
-                                <FilterBar onPrese={toggleCategoriesContent} />
-                                <View style={{paddingTop: 20,}}>
-                                    <FiveLastMovies />
-                                    <SectionTitle title='Last Movies'/>
-                                    <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5}}>
-                                        <MoviesCard onPress={() => setDetailsComponent(true)} src={movie3}/>
-                                    </ScrollView>
-                                    <SectionTitle title='All Movies' />
-                                    <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
-                                        {movies.map((movie) => (
-                                            <MoviesCard
-                                                key={movie._id}
-                                                onPress={() => {setDetailsComponent(true); setSelectedMovieId(movie._id)}}
-                                                src={movie.picture}
-                                            />
-                                        ))}
-                                    </ScrollView>
-                                    <SectionTitle title='My List' />
-                                    <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5,}}>
-                                        {favorites?.map((favorite) => (
-                                            <MoviesCard key={favorite._id} onPress={() => {setDetailsComponent(true); setSelectedMovieId(favorite.movie._id)}}  src={favorite.movie.picture}/>
-                                        ))}
-                                    </ScrollView>
-                                </View>
-
+                    <ScrollView>
+                        <FilterBar onPrese={toggleCategoriesContent} />
+                        <View style={{ paddingTop: 20 }}>
+                            <FiveLastMovies />
+                            <SectionTitle title='Last Movies' />
+                            <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5 }}>
+                                <MoviesCard onPress={() => setDetailsComponent(true)} src={movie3}/>
                             </ScrollView>
-                        </LinearGradient>
-                    )}
-                </View>
-            )
+
+                            <SectionTitle title='All Movies' />
+                            <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5 }}>
+                                {movies.map((movie) => (
+                                    <MoviesCard
+                                        key={movie._id}
+                                        onPress={() => {
+                                            setDetailsComponent(true);
+                                            setSelectedMovieId(movie._id);
+                                        }}
+                                        src={movie.picture}
+                                    />
+                                ))}
+                            </ScrollView>
+
+                            <SectionTitle title='My List' />
+                            <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5 }}>
+                                {favorites?.map((favorite) => (
+                                    <MoviesCard key={favorite._id} onPress={() => { setDetailsComponent(true); setSelectedMovieId(favorite.movie._id);}}
+                                        src={favorite.movie.picture}
+                                    />
+                                ))}
+                            </ScrollView>
+                        </View>
+                    </ScrollView>
+                </LinearGradient>
+            </View>
+        )
     );
 }
 
