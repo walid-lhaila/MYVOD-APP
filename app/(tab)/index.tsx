@@ -77,11 +77,13 @@ export default function Index() {
 
                     <ScrollView>
                         <FilterBar onPrese={toggleCategoriesContent} />
-                        <View style={{ paddingTop: 20 }}>
+                        <View style={{ paddingVertical: 30 }}>
                             <FiveLastMovies />
                             <SectionTitle title='Last Movies' />
                             <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5 }}>
-                                <MoviesCard onPress={() => setDetailsComponent(true)} src={movie3}/>
+                                {movies.slice(-5).map((movie) => (
+                                    <MoviesCard key={movie._id} onPress={() => setDetailsComponent(true)} src={movie.picture}/>
+                                    ))}
                             </ScrollView>
 
                             <SectionTitle title='All Movies' />
@@ -116,7 +118,7 @@ export default function Index() {
 
 const styles = StyleSheet.create({
     header: {
-        paddingTop: 30,
+        paddingTop: 50,
         backgroundColor: 'black',
         opacity: 0.7,
         flexDirection: 'row',

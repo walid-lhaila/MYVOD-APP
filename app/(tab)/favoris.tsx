@@ -49,7 +49,7 @@
             height: '100%',
         },
         header: {
-            paddingTop: 30,
+            paddingTop: 50,
             backgroundColor: 'black',
             opacity: 0.7,
             flexDirection: 'row',

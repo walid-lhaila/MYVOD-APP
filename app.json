@@ -8,13 +8,26 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#333",
+      "image": "./assets/images/netIcon.png",
+      "width": 100,
+      "height": 100
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        },
+        "NSCameraUsageDescription": "This app uses the camera to allow video playback.",
+        "NSMicrophoneUsageDescription": "This app uses the microphone to allow video playback."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/netIcon.png",
-        "backgroundColor": "#000000"
+        "backgroundColor": "#333"
       }
     },
     "web": {
@@ -30,14 +43,14 @@
           "image": "./assets/images/netIcon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#000000",
+          "backgroundColor": "#333",
           "dark": {
             "image": "./assets/splash-icon-dark.png",
-            "backgroundColor": "#000000"
+            "backgroundColor": "#333"
           }
         }
       ],
-      "expo-video"
+      "expo-av"
     ],
     "experiments": {
       "typedRoutes": true
