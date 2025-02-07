@@ -3,8 +3,17 @@ import { LinearGradient } from 'expo-linear-gradient';
 import bg from '../assets/images/bg.jpeg';
 import {useRouter} from "expo-router";
 
+
 export default function Index() {
     const router = useRouter();
+
+    const handleSignIn = async () => {
+        router.push('/login');
+    };
+
+    const handleSignUp = async () => {
+        router.push('/register');
+    };
 
     return (
         <View style={{ flex: 1, backgroundColor: 'black' }}>
@@ -15,10 +24,10 @@ export default function Index() {
                     <View style={{ justifyContent: 'center', }}>
                         <Text style={styles.title}>Streaming All Movie On The Go</Text>
                         <Text style={styles.description}>No matter what your mood or preference, flixaura has the perfect movie or show to match.</Text>
-                        <TouchableOpacity onPress={() => router.push('/login')} style={styles.signInButton}>
+                        <TouchableOpacity onPress={handleSignIn} style={styles.signInButton}>
                             <Text style={styles.buttonText}>Sign In</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => router.push('/register') } style={styles.signUpButton}>
+                        <TouchableOpacity onPress={handleSignUp} style={styles.signUpButton}>
                             <Text style={styles.signUpbuttonText}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>
