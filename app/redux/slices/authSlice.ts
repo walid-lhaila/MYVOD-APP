@@ -51,6 +51,7 @@ export const login = createAsyncThunk(
             AsyncStorage.setItem('token', token);
             AsyncStorage.setItem('user', user.name);
             AsyncStorage.setItem('id', user._id);
+            AsyncStorage.setItem('lastActiveAt', user.lastActiveAt);
             return { token, user };
         } catch (error) {
             console.error('Error:', error);

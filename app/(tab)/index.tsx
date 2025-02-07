@@ -1,13 +1,12 @@
-import {View, StyleSheet, Image, ScrollView, Pressable} from "react-native";
+import {View, StyleSheet, Image, Pressable, Animated, ScrollView} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import netIcon from '../../assets/images/netIcon.png';
 import {LinearGradient} from "expo-linear-gradient";
 import FilterBar from "@/app/components/FilterBar";
-import movie3 from '../../assets/images/paint.png';
 import FiveLastMovies from "@/app/components/FiveLastMovies";
 import SectionTitle from "@/app/components/SectionTitle";
 import MoviesCard from "@/app/components/MoviesCard";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import MovieDetails from "@/app/components/MovieDetails";
 import SearchComponents from "@/app/components/SearchComponents";
 import {useDispatch, useSelector} from "react-redux";
@@ -32,6 +31,9 @@ export default function Index() {
     const { favorites } = useSelector((state) => state.favorite);
     const [categoriesVisible, setCategoriesVisible] = useState(false);
 
+    // Create Animated Value for scroll position
+    const scrollY = useRef(new Animated.Value(0)).current;
+
     const toggleCategoriesContent = () => {
         setCategoriesVisible(!categoriesVisible);
     }
@@ -54,6 +56,12 @@ export default function Index() {
         return unsubscribe;
     }, [navigation]);
 
+    const backgroundColor = scrollY.interpolate({
+        inputRange: [0, 300],
+        outputRange: ["#FFD700", "black"],
+        extrapolate: "clamp",
+    });
+
     return (
         detailsComponent ? (
             <MovieDetails movieId={selectedMovieId} close={() => { setDetailsComponent(false); setSelectedMovieId(null); }}
@@ -65,7 +73,7 @@ export default function Index() {
             <CategoryComponents selectedCategory={selectedCategory} removeCategories={() => setCategoriesVisible(false)} close={() => setCategoryComponents(false)} />
         ) : (
             <View style={{ flex: 1 }}>
-                <LinearGradient colors={['gold', 'black']} style={styles.gradient}>
+                <Animated.View style={[styles.gradient, { backgroundColor }]}>
                     <View style={styles.header}>
                         <Image style={styles.logo} source={netIcon} />
                         <Pressable onPress={() => setSearch(true)}>
@@ -75,7 +83,13 @@ export default function Index() {
 
                     <AllCategories onPress={(selectedCategoryName) => {setCategoryComponents(true); setSelectedCategory(selectedCategoryName)}} visible={categoriesVisible} onClose={() => setCategoriesVisible(false)}/>
 
-                    <ScrollView>
+                    <Animated.ScrollView
+                        onScroll={Animated.event(
+                            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                            { useNativeDriver: false }
+                        )}
+                        scrollEventThrottle={1}
+                    >
                         <FilterBar onPrese={toggleCategoriesContent} />
                         <View style={{ paddingVertical: 30 }}>
                             <FiveLastMovies />
@@ -83,7 +97,7 @@ export default function Index() {
                             <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5 }}>
                                 {movies.slice(-5).map((movie) => (
                                     <MoviesCard key={movie._id} onPress={() => setDetailsComponent(true)} src={movie.picture}/>
-                                    ))}
+                                ))}
                             </ScrollView>
 
                             <SectionTitle title='All Movies' />
@@ -104,13 +118,13 @@ export default function Index() {
                             <ScrollView horizontal style={{ paddingTop: 10, paddingHorizontal: 5 }}>
                                 {favorites?.map((favorite) => (
                                     <MoviesCard key={favorite._id} onPress={() => { setDetailsComponent(true); setSelectedMovieId(favorite.movie._id);}}
-                                        src={favorite.movie.picture}
+                                                src={favorite.movie.picture}
                                     />
                                 ))}
                             </ScrollView>
                         </View>
-                    </ScrollView>
-                </LinearGradient>
+                    </Animated.ScrollView>
+                </Animated.View>
             </View>
         )
     );

@@ -5,11 +5,12 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/netIcon.png",
+    "developmentClient": false,
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "backgroundColor": "#333",
+      "backgroundColor": "#080808",
       "image": "./assets/images/netIcon.png",
       "width": 100,
       "height": 100
@@ -21,19 +22,30 @@
           "NSAllowsArbitraryLoads": true
         },
         "NSCameraUsageDescription": "This app uses the camera to allow video playback.",
-        "NSMicrophoneUsageDescription": "This app uses the microphone to allow video playback."
-      }
+        "NSMicrophoneUsageDescription": "This app uses the microphone to allow video playback.",
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ],
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "com.walidlhaila.VOPAPP"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/netIcon.png",
         "backgroundColor": "#333"
-      }
+      },
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/netIcon.png"
     },
     "plugins": [
       "expo-router",
@@ -50,10 +62,27 @@
           }
         }
       ],
-      "expo-av"
+      "expo-av",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/netIcon.png",
+          "color": "#333",
+          "sounds": []
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "7a7374af-8f67-4cc3-89dd-c1c45c10015f"
+      }
+    },
+    "owner": "walidlhaila"
   }
 }
